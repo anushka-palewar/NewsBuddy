@@ -1,0 +1,39 @@
+.adult-container {
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+.adult-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 20px;
+}
+
+.adult-card {
+  background: white;
+  padding: 18px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.adult-card h3 {
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.adult-summary {
+  color: #444;
+  font-size: 15px;
+}
+
+.adult-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.category {
+  font-weight: bold;
+  color: #1976d2;
+}

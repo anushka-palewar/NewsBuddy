@@ -10,29 +10,29 @@ import in.sp.main.entity.News;
 import in.sp.main.repository.NewsRepository;
 
 @Service
-public class KidsNewsImportService {
+public class AdultNewsImportService {
 
     private static final int DAILY_LIMIT = 20;
 
     @Autowired
-    private KidsRssService rssService;
+    private AdultRssService rssService;
 
     @Autowired
     private NewsRepository newsRepository;
 
-    public void importKidsNews() {
+    public void importAdultNews() {
 
         LocalDate today = LocalDate.now();
 
         long alreadyAdded =
-            newsRepository.countByAudienceAndPublishedDate("CHILD", today);
+            newsRepository.countByAudienceAndPublishedDate("ADULT", today);
 
         if (alreadyAdded >= DAILY_LIMIT) {
-            System.out.println("Kids daily limit reached");
+            System.out.println("Adult daily limit reached");
             return;
         }
 
-        List<News> rssNews = rssService.fetchKidsNewsFromRss();
+        List<News> rssNews = rssService.fetchAdultNews();
 
         int remaining = DAILY_LIMIT - (int) alreadyAdded;
         int added = 0;
@@ -40,14 +40,14 @@ public class KidsNewsImportService {
         for (News news : rssNews) {
             if (added >= remaining) break;
 
-            news.setAudience("CHILD");
+            news.setAudience("ADULT");
             news.setPublishedDate(today);
 
             newsRepository.save(news);
             added++;
         }
 
-        System.out.println("Kids news added today: " + added);
+        System.out.println("Adult news added today: " + added);
     }
 }
 

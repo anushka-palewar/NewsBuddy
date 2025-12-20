@@ -1,0 +1,23 @@
+.navbar {
+  width: 100vw;              /* FULL SCREEN WIDTH */
+  margin: 0;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1976d2;
+  box-sizing: border-box;
+}
+
+.logo {
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.links a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+}

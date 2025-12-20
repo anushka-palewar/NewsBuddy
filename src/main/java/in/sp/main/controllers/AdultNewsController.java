@@ -6,43 +6,45 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.sp.main.entity.News;
 import in.sp.main.repository.NewsRepository;
-import in.sp.main.services.KidsNewsImportService;
+import in.sp.main.services.AdultNewsImportService;
 
 @RestController
-@RequestMapping("/api/kids/news")
+@RequestMapping("/api/news")
 @CrossOrigin("*")
-public class KidsNewsController {
+public class AdultNewsController {
 
     @Autowired
     private NewsRepository repo;
-
+    
     @Autowired
-    private KidsNewsImportService importService;
+    private AdultNewsImportService importService;
 
     @GetMapping
-    public List<News> getAllKidsNews() {
-        return repo.findByAudienceOrderByPublishedDateDesc("CHILD");
+    public List<News> getAllAdultNews() {
+        return repo.findByAudienceOrderByPublishedDateDesc("ADULT");
     }
 
-    @GetMapping("/today")
-    public List<News> getTodaysKidsNews() {
-        return repo.findByAudienceAndPublishedDate(
-                "CHILD",
+    @GetMapping("/category/{cat}")
+    public List<News> byCategory(@PathVariable String cat) {
+        return repo.findByAudienceAndCategoryAndPublishedDate(
+                "ADULT",
+                cat,
                 LocalDate.now()
         );
     }
-
+    
     @GetMapping("/import")
-    public String importKidsNewsNow() {
-        importService.importKidsNews();
-        return "Kids news imported";
+    public String importAdultNewsNow() {
+        importService.importAdultNews();
+        return "Adult news imported";
     }
-}
 
+}
 
 
