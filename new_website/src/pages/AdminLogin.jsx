@@ -20,7 +20,7 @@ const AdminLogin = () => {
 
     if (ok) {
       localStorage.setItem("admin", "true");
-      navigate("/admin/newspapers");
+      navigate("/admin/dashboard", { replace: true });
     } else {
       setError("Wrong password");
     }

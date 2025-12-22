@@ -14,13 +14,13 @@ import in.sp.main.repository.NewspaperRepository;
 @RestController
 @RequestMapping("/api/newspapers")
 @CrossOrigin("*")
-public class NewspaperController {
+public class NewspaperPublicController {
 
     @Autowired
     private NewspaperRepository repo;
 
     @GetMapping
-    public List<Newspaper> getAllNewspapers() {
+    public List<Newspaper> getActiveNewspapers() {
         return repo.findByActiveTrue();
     }
 }

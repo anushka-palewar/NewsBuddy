@@ -1,4 +1,4 @@
-.kids-grid {
+/* .kids-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
@@ -12,4 +12,4 @@
 
 .kids-card h3 {
   color: #1565c0;
-}
+} */

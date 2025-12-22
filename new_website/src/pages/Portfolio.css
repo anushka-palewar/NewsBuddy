@@ -1,0 +1,77 @@
+.portfolio {
+  padding: 40px;
+  line-height: 1.6;
+}
+
+/* HERO */
+.p-hero {
+  background: linear-gradient(to right, #0d47a1, #1976d2);
+  color: white;
+  padding: 80px 40px;
+  border-radius: 16px;
+}
+
+.p-hero h1 {
+  font-size: 48px;
+}
+
+.p-hero p {
+  max-width: 700px;
+  margin-top: 15px;
+}
+
+.tag {
+  display: inline-block;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* SECTIONS */
+.p-section {
+  margin-top: 60px;
+}
+
+.p-section.light {
+  background: #f5f7fb;
+  padding: 40px;
+  border-radius: 14px;
+}
+
+/* FEATURES */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.f-card {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* TECH */
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.tech span {
+  background: #e3f2fd;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+/* FOOTER */
+.p-footer {
+  margin-top: 80px;
+  text-align: center;
+  color: #555;
+}

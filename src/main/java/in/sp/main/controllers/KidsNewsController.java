@@ -14,7 +14,7 @@ import in.sp.main.repository.NewsRepository;
 import in.sp.main.services.KidsNewsImportService;
 
 @RestController
-@RequestMapping("/api/kids/news")
+@RequestMapping("/api/news/kids")
 @CrossOrigin("*")
 public class KidsNewsController {
 
@@ -24,10 +24,14 @@ public class KidsNewsController {
     @Autowired
     private KidsNewsImportService importService;
 
-    @GetMapping
-    public List<News> getAllKidsNews() {
-        return repo.findByAudienceOrderByPublishedDateDesc("CHILD");
+    @GetMapping("/kids")
+    public List<News> getKidsNews() {
+        return repo.findByAudienceAndPublishedDate(
+            "CHILD",
+            LocalDate.now()
+        );
     }
+
 
     @GetMapping("/today")
     public List<News> getTodaysKidsNews() {

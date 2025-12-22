@@ -15,7 +15,7 @@ import in.sp.main.repository.NewsRepository;
 import in.sp.main.services.AdultNewsImportService;
 
 @RestController
-@RequestMapping("/api/news")
+@RequestMapping("/api/news/adult")
 @CrossOrigin("*")
 public class AdultNewsController {
 
@@ -43,6 +43,11 @@ public class AdultNewsController {
     public String importAdultNewsNow() {
         importService.importAdultNews();
         return "Adult news imported";
+    }
+    
+    @GetMapping("/{id}")
+    public News getArticleById(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow();
     }
 
 }
