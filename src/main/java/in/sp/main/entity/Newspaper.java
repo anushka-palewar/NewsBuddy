@@ -16,6 +16,7 @@ public class Newspaper {
     private String language;   // Hindi / Marathi / English
     private String format;       // PDF / WEBSITE
     private String url;
+    private String imageUrl;
     private boolean active;
 	public Long getId() {
 		return id;
@@ -52,6 +53,12 @@ public class Newspaper {
 	}
 	public void setFormat(String format) {
 		this.format = format;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
     // getters & setters

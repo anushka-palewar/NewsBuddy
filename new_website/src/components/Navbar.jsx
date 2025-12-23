@@ -17,24 +17,27 @@ const Navbar = () => {
     <>
       {/* TOP ADMIN STRIP */}
       <div className="bg-gradient-to-r from-red-600 to-indigo-600 text-white text-sm">
-        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
-          <span>
-            {new Date().toDateString()} •{" "}
-            <span className="text-green-300 font-semibold">
-              Breaking News Available
-            </span>
-          </span>
+  <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
+    
+    {/* LEFT INFO */}
+    <span>
+      {new Date().toDateString()} •{" "}
+      <span className="text-green-300 font-semibold">
+        Breaking News Available
+      </span>
+    </span>
 
-          <button
-            onClick={() =>
-              navigate(isAdmin ? "/admin/dashboard" : "/admin/login")
-            }
-            className="flex items-center gap-2 hover:underline"
-          >
-            👤 Admin Portal
-          </button>
-        </div>
-      </div>
+    {/* ADMIN PORTAL */}
+    <button
+      onClick={() => navigate("/admin/login")}
+      className="flex items-center gap-2 hover:underline font-medium"
+    >
+      👤 Admin Portal
+    </button>
+
+  </div>
+</div>
+
 
       {/* MAIN NAVBAR */}
       <nav className="bg-white border-b sticky top-0 z-50">

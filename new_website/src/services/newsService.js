@@ -35,5 +35,61 @@ export const getNewspapers = async () => {
   return res.ok ? res.json() : [];
 };
 
+export const addPaper = async (paper) => {
+  await fetch("http://localhost:8080/api/admin/newspapers", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(paper),
+  });
+};
+
+export const getAllPapersAdmin = async () => {
+  const res = await fetch("http://localhost:8080/api/admin/newspapers");
+  return res.ok ? res.json() : [];
+};
+
+export const deletePaper = async (id) => {
+  await fetch(
+    `http://localhost:8080/api/admin/newspapers/${id}`,
+    { method: "DELETE" }
+  );
+};
+
+export const togglePaper = async (id) => {
+  await fetch(
+    `http://localhost:8080/api/admin/newspapers/${id}/toggle`,
+    { method: "PUT" }
+  );
+};
+
+/* ---------- ADMIN LIVE CHANNELS ---------- */
+
+export const getLiveChannelsAdmin = async () => {
+  const res = await fetch("http://localhost:8080/api/admin/live-channels");
+  return res.ok ? res.json() : [];
+};
+
+export const addLiveChannel = async (channel) => {
+  await fetch("http://localhost:8080/api/admin/live-channels", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(channel),
+  });
+};
+
+export const deleteLiveChannel = async (id) => {
+  await fetch(
+    `http://localhost:8080/api/admin/live-channels/${id}`,
+    { method: "DELETE" }
+  );
+};
+
+export const toggleLiveChannel = async (id) => {
+  await fetch(
+    `http://localhost:8080/api/admin/live-channels/${id}/toggle`,
+    { method: "PUT" }
+  );
+};
+
 
 

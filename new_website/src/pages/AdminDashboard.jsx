@@ -5,33 +5,45 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAdmin = localStorage.getItem("admin");
-    if (!isAdmin) {
+    if (!localStorage.getItem("admin")) {
       navigate("/admin/login", { replace: true });
     }
   }, [navigate]);
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>🛠 Admin Dashboard</h1>
+    <div className="max-w-4xl mx-auto px-6 py-20">
+      <h1 className="text-3xl font-bold mb-10">
+        🛠 Admin Dashboard
+      </h1>
 
-      <div style={{ marginTop: "30px" }}>
+      <div className="grid sm:grid-cols-2 gap-6">
         <button
-          style={{ marginRight: "20px" }}
           onClick={() => navigate("/admin/newspapers")}
+          className="p-6 border rounded-lg hover:shadow transition text-left"
         >
-          📰 Newspaper Management
+          <h2 className="text-xl font-semibold mb-2">
+            📰 Newspaper Management
+          </h2>
+          <p className="text-gray-600 text-sm">
+            Add, enable or disable newspapers
+          </p>
         </button>
 
-        <button onClick={() => navigate("/admin/live-channels")}>
-          📺 Live TV Management
+        <button
+          onClick={() => navigate("/admin/live-channels")}
+          className="p-6 border rounded-lg hover:shadow transition text-left"
+        >
+          <h2 className="text-xl font-semibold mb-2">
+            📺 Live TV Management
+          </h2>
+          <p className="text-gray-600 text-sm">
+            Manage live YouTube news channels
+          </p>
         </button>
       </div>
 
-      <br />
-
       <button
-        style={{ background: "#d32f2f", color: "white" }}
+        className="mt-10 text-sm text-red-600 hover:underline"
         onClick={() => {
           localStorage.removeItem("admin");
           navigate("/admin/login", { replace: true });
@@ -44,4 +56,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-

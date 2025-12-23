@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class AdultRssService {
     private String hinduRss;
 
     public List<News> fetchAdultNews() {
+
         List<News> list = new ArrayList<>();
 
         fetchFromRss(hinduRss, "National", list);
@@ -36,6 +39,7 @@ public class AdultRssService {
                     .build(new XmlReader(new URL(rssUrl)));
 
             for (SyndEntry entry : feed.getEntries()) {
+
                 News news = new News();
                 news.setTitle(entry.getTitle());
                 news.setSummary(clean(entry.getDescription()));
@@ -45,8 +49,12 @@ public class AdultRssService {
                 news.setSourceUrl(entry.getLink());
                 news.setPublishedDate(LocalDate.now());
 
+                // ✅ IMAGE FIX (IMPORTANT)
+                news.setImageUrl(extractImage(entry.getLink()));
+
                 list.add(news);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,5 +64,20 @@ public class AdultRssService {
         if (c == null) return "";
         return c.getValue().replaceAll("<[^>]*>", "");
     }
-}
 
+    // ✅ Extract OG Image from article page
+    private String extractImage(String url) {
+        try {
+            Document doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0")
+                    .timeout(10_000)
+                    .get();
+
+            return doc.select("meta[property=og:image]")
+                      .attr("content");
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+}

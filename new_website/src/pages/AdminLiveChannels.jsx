@@ -26,10 +26,21 @@ const AdminLiveChannels = () => {
   const load = () => getLiveChannelsAdmin().then(setChannels);
 
   const submit = async () => {
-    await addLiveChannel(form);
-    setForm({ name: "", language: "Hindi", youtubeUrl: "" });
-    load();
-  };
+  if (!form.name || !form.youtubeUrl) {
+    alert("Channel name and YouTube URL required");
+    return;
+  }
+
+  if (!form.youtubeUrl.includes("youtube")) {
+    alert("Enter a valid YouTube URL");
+    return;
+  }
+
+  await addLiveChannel(form);
+  setForm({ name: "", language: "Hindi", youtubeUrl: "" });
+  load();
+};
+
 
   return (
     <div style={{ padding: "30px" }}>

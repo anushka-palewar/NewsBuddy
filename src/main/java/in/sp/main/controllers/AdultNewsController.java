@@ -18,7 +18,12 @@ import in.sp.main.services.AdultNewsImportService;
 @RequestMapping("/api/news/adult")
 @CrossOrigin("*")
 public class AdultNewsController {
-
+	
+	@GetMapping("/{id}")
+    public News getArticleById(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow();
+    }
+	
     @Autowired
     private NewsRepository repo;
     
@@ -45,10 +50,7 @@ public class AdultNewsController {
         return "Adult news imported";
     }
     
-    @GetMapping("/{id}")
-    public News getArticleById(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
-    }
+    
 
 }
 

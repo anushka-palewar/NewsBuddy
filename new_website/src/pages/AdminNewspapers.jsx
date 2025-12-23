@@ -21,10 +21,32 @@ const AdminNewspapers = () => {
   useEffect(() => { load(); }, []);
 
   const submit = async () => {
-    await addPaper(form);
-    setForm({ name: "", language: "English", format: "WEBSITE", url: "" });
-    load();
-  };
+  if (!form.name || !form.url || !form.language || !form.imageUrl) {
+    alert("All fields are required");
+    return;
+  }
+
+  if (!form.url.startsWith("http")) {
+    alert("Enter a valid newspaper URL");
+    return;
+  }
+
+  if (!form.imageUrl.startsWith("http")) {
+    alert("Enter a valid image URL");
+    return;
+  }
+
+  await addPaper(form);
+  setForm({
+    name: "",
+    language: "English",
+    format: "WEBSITE",
+    url: "",
+    imageUrl: ""
+  });
+  load();
+};
+
 
   const navigate = useNavigate();
 
@@ -80,6 +102,12 @@ const AdminNewspapers = () => {
       <input placeholder="URL"
         value={form.url}
         onChange={e => setForm({ ...form, url: e.target.value })}
+      />
+
+      <input
+        placeholder="Image URL (logo)"
+        value={form.imageUrl}
+        onChange={e => setForm({ ...form, imageUrl: e.target.value })}
       />
 
       <button onClick={submit}>Add</button>
