@@ -76,8 +76,8 @@ const Navbar = () => {
               className="border px-4 py-2 rounded-md text-sm w-64 focus:outline-none focus:ring"
             />
 
-            {/* DARK MODE PLACEHOLDER */}
-            <button className="text-xl">🌙</button>
+            {/* DARK MODE PLACEHOLDER
+            <button className="text-xl">🌙</button> */}
           </div>
         </div>
       </nav>

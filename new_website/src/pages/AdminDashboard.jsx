@@ -1,58 +1,78 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem("admin")) {
-      navigate("/admin/login", { replace: true });
-    }
-  }, [navigate]);
-
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
-      <h1 className="text-3xl font-bold mb-10">
-        🛠 Admin Dashboard
-      </h1>
+    <div className="min-h-screen flex bg-gray-100">
+      
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-lg">
+        <div className="p-6 text-xl font-bold text-black">
+          NewsBuddy
+        </div>
 
-      <div className="grid sm:grid-cols-2 gap-6">
-        <button
-          onClick={() => navigate("/admin/newspapers")}
-          className="p-6 border rounded-lg hover:shadow transition text-left"
-        >
-          <h2 className="text-xl font-semibold mb-2">
+        <nav className="px-4 space-y-2">
+          <button
+            onClick={() => navigate("/admin/newspapers")}
+            className="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
             📰 Newspaper Management
-          </h2>
-          <p className="text-gray-600 text-sm">
-            Add, enable or disable newspapers
-          </p>
-        </button>
+          </button>
 
-        <button
-          onClick={() => navigate("/admin/live-channels")}
-          className="p-6 border rounded-lg hover:shadow transition text-left"
-        >
-          <h2 className="text-xl font-semibold mb-2">
-            📺 Live TV Management
-          </h2>
-          <p className="text-gray-600 text-sm">
-            Manage live YouTube news channels
-          </p>
-        </button>
-      </div>
+          <button
+            onClick={() => navigate("/admin/live-news")}
+            className="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            📺 Live Channel Management
+          </button>
 
-      <button
-        className="mt-10 text-sm text-red-600 hover:underline"
-        onClick={() => {
-          localStorage.removeItem("admin");
-          navigate("/admin/login", { replace: true });
-        }}
-      >
-        🚪 Logout
-      </button>
+          <button
+            onClick={() => {
+              localStorage.removeItem("admin");
+              navigate("/admin/login");
+            }}
+            className="w-full text-left px-4 py-2 rounded-lg text-red-600 hover:bg-red-100"
+          >
+            🚪 Logout
+          </button>
+        </nav>
+      </aside>
+
+      {/* Main */}
+      <main className="flex-1 p-8">
+        <h1 className="text-2xl font-bold mb-6">
+          Admin Dashboard
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <DashboardCard
+            title="Newspaper Management"
+            onClick={() => navigate("/admin/newspapers")}
+          />
+          <DashboardCard
+            title="Live Channel Management"
+            onClick={() => navigate("/admin/live-channels")}
+          />
+        </div>
+      </main>
     </div>
   );
 };
 
+const DashboardCard = ({ title, onClick }) => (
+  <div
+    onClick={onClick}
+    className="cursor-pointer bg-white rounded-xl shadow p-6 hover:shadow-md transition"
+  >
+    <h3 className="text-gray-700 text-sm">
+      Manage
+    </h3>
+    <p className="text-lg font-semibold mt-2">
+      {title}
+    </p>
+  </div>
+);
+
 export default AdminDashboard;
+

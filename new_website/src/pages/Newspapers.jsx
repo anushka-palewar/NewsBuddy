@@ -7,7 +7,17 @@ const Newspapers = () => {
   useEffect(() => {
     fetch("http://localhost:8080/api/newspapers")
       .then(res => res.json())
-      .then(data => setPapers(data));
+      .then(data => {
+        // ✅ show only active newspapers
+        const activeOnly = data.filter(p => p.active);
+
+        // ✅ basic duplicate guard (by id)
+        const unique = Array.from(
+          new Map(activeOnly.map(p => [p.id, p])).values()
+        );
+
+        setPapers(unique);
+      });
   }, []);
 
   const filteredPapers =
@@ -50,6 +60,17 @@ const Newspapers = () => {
             key={paper.id}
             className="border rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition"
           >
+            {/* Logo */}
+            <img
+              src={paper.imageUrl}
+              alt={paper.name}
+              className="w-20 h-20 object-contain mb-4"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://via.placeholder.com/80?text=Logo";
+              }}
+            />
+
             <div className="flex items-start justify-between">
               <h3 className="text-lg font-semibold text-gray-900">
                 {paper.name}
@@ -86,4 +107,3 @@ const Newspapers = () => {
 };
 
 export default Newspapers;
-
