@@ -14,10 +14,10 @@ const Article = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        let res = await fetch(`http://localhost:9999/api/news/adult/${id}`);
+        let res = await fetch(`http://localhost:8080/api/news/adult/${id}`);
 
         if (!res.ok) {
-          res = await fetch(`http://localhost:9999/api/news/kids/${id}`);
+          res = await fetch(`http://localhost:8080/api/news/kids/${id}`);
         }
 
         if (res.ok) {
@@ -41,10 +41,10 @@ const Article = () => {
     setSummaryLoading(true);
 
     try {
-      let res = await fetch(`http://localhost:9999/api/news/adult/${id}/summary`);
+      let res = await fetch(`http://localhost:8080/api/news/adult/${id}/summary`);
 
       if (!res.ok) {
-        res = await fetch(`http://localhost:9999/api/news/kids/${id}/summary`);
+        res = await fetch(`http://localhost:8080/api/news/kids/${id}/summary`);
       }
 
       if (res.ok) {

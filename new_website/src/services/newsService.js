@@ -1,20 +1,32 @@
 const BASE = "http://localhost:8080/api";
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
+
 /* ---------- ADULT ---------- */
 export const getAdultNews = async () => {
-  const res = await fetch(`${BASE}/news/adult`);
+  const res = await fetch(`${BASE}/news/adult`, {
+    headers: getAuthHeaders()
+  });
   return res.ok ? res.json() : [];
 };
 
 /* ---------- KIDS ---------- */
 export const getKidsNews = async () => {
-  const res = await fetch(`${BASE}/news/kids/today`);
+  const res = await fetch(`${BASE}/news/kids/today`, {
+    headers: getAuthHeaders()
+  });
   return res.ok ? res.json() : [];
 };
 
 /* ---------- WEEKLY ---------- */
 export const getWeeklyAdultSummary = async () => {
-  const res = await fetch(`${BASE}/weekly-summary/adult`);
+  const res = await fetch(`${BASE}/weekly-summary/adult`, {
+    headers: getAuthHeaders()
+  });
   return res.ok ? res.json() : {};
 };
 

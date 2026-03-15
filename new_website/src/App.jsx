@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./components/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import SearchResults from "./pages/SearchResults";
 import Home from "./pages/Home";
 import KidsNews from "./pages/KidsNews";
@@ -12,29 +14,60 @@ import Article from "./pages/Article";
 import WeeklySummary from "./pages/WeeklySummary";
 import AdminNewspapers from "./pages/AdminNewspapers";
 import AdminLiveChannels from "./pages/AdminLiveChannels";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/kids" element={<KidsNews />} />
-        <Route path="/adult" element={<AdultNews />} />
-        <Route path="/newspapers" element={<Newspapers />} />
-        <Route path="/live" element={<LiveNews />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
 
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/article/:id" element={<Article />} />
-        <Route path="*" element={<WeeklySummary />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/newspapers" element={<AdminNewspapers />} />
-        <Route path="/admin/live-channels" element={<AdminLiveChannels />} />
+          {/* Protected Routes */}
+          <Route path="/kids" element={
+            <ProtectedRoute allowedRoles={['CHILD', 'ADMIN']}>
+              <KidsNews />
+            </ProtectedRoute>
+          } />
+          <Route path="/adult" element={
+            <ProtectedRoute allowedRoles={['ADULT', 'ADMIN']}>
+              <AdultNews />
+            </ProtectedRoute>
+          } />
+          <Route path="/newspapers" element={
+            <ProtectedRoute allowedRoles={['ADULT', 'ADMIN']}>
+              <Newspapers />
+            </ProtectedRoute>
+          } />
+          <Route path="/live" element={<LiveNews />} />
+          <Route path="/weekly" element={<WeeklySummary />} />
 
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/newspapers" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminNewspapers />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/live-channels" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminLiveChannels />
+            </ProtectedRoute>
+          } />
 
-      </Routes>
-    </BrowserRouter>
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/article/:id" element={<Article />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
