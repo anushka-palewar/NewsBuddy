@@ -28,10 +28,9 @@ function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/article/:id" element={<Article />} />
         <Route path="*" element={<WeeklySummary />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-<Route path="/admin/dashboard" element={<AdminDashboard />} />
-<Route path="/admin/newspapers" element={<AdminNewspapers />} />
-<Route path="/admin/live-channels" element={<AdminLiveChannels />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/newspapers" element={<AdminNewspapers />} />
+        <Route path="/admin/live-channels" element={<AdminLiveChannels />} />
 
 
       </Routes>
