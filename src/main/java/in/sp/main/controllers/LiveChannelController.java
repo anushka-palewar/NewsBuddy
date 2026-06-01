@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.sp.main.entity.LiveChannel;
@@ -26,8 +27,11 @@ public class LiveChannelController {
 
     // USER
     @GetMapping
-    public List<LiveChannel> getActiveChannels() {
-        return repo.findByActiveTrue();
+    public List<LiveChannel> getActiveChannels(@RequestParam(required = false) String audience) {
+        if (audience == null || audience.isBlank()) {
+            return repo.findByActiveTrue();
+        }
+        return repo.findByAudienceAndActiveTrue(audience.toUpperCase());
     }
 
     @GetMapping("/language/{lang}")

@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthContext";
+import { getLiveChannels } from "../services/newsService";
 
 const LiveNews = () => {
+  const { user } = useAuth();
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/live-channels")
-      .then((res) => res.json())
+    const audience = user?.role === "CHILD" ? "CHILD" : user?.role === "ADULT" ? "ADULT" : null;
+
+    getLiveChannels(audience)
       .then((data) => {
         if (!Array.isArray(data)) {
           setChannels([]);
           return;
         }
-
-        // show only active channels
         const activeOnly = data.filter((ch) => ch.active);
-
         setChannels(activeOnly);
       })
       .catch(() => setChannels([]));
-  }, []);
+  }, [user]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">

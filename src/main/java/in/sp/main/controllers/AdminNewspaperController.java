@@ -18,14 +18,20 @@ public class AdminNewspaperController {
 
     // GET all papers (admin view)
     @GetMapping
-    public List<Newspaper> getAll() {
-        return repo.findAll();
+    public List<Newspaper> getAll(@RequestParam(required = false) String audience) {
+        if (audience == null || audience.isBlank()) {
+            return repo.findAll();
+        }
+        return repo.findByAudience(audience.toUpperCase());
     }
 
     // ADD newspaper
     @PostMapping
     public Newspaper add(@RequestBody Newspaper paper) {
         paper.setActive(true);
+        if (paper.getAudience() == null || paper.getAudience().isBlank()) {
+            paper.setAudience("ADULT");
+        }
         return repo.save(paper);
     }
 

@@ -17,13 +17,19 @@ public class AdminLiveChannelController {
     private LiveChannelRepository repo;
 
     @GetMapping
-    public List<LiveChannel> getAll() {
-        return repo.findAll();
+    public List<LiveChannel> getAll(@RequestParam(required = false) String audience) {
+        if (audience == null || audience.isBlank()) {
+            return repo.findAll();
+        }
+        return repo.findByAudience(audience.toUpperCase());
     }
 
     @PostMapping
     public LiveChannel add(@RequestBody LiveChannel ch) {
         ch.setActive(true);
+        if (ch.getAudience() == null || ch.getAudience().isBlank()) {
+            ch.setAudience("ADULT");
+        }
         return repo.save(ch);
     }
 

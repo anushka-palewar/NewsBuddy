@@ -32,14 +32,24 @@ const Navbar = () => {
       case "ADMIN":
         return [
           { to: "/admin/dashboard", label: "Dashboard" },
+          { to: "/admin/content", label: "Content" },
+          { to: "/admin/live-channels", label: "Live TV" },
           { to: "/admin/newspapers", label: "Newspapers" },
-          { to: "/admin/live-channels", label: "Live Channels" }
+          { to: "/admin/users", label: "Users" },
+          { to: "/admin/analytics", label: "Analytics" },
+          { to: "/admin/system", label: "System" },
+          { to: "/ai-digest", label: "AI Digest" },
+          { to: "/daily-quiz", label: "Daily Quiz" },
+          { to: "/discover", label: "Discover" },
         ];
       case "ADULT":
         return [
           { to: "/", label: "Home" },
           { to: "/adult", label: "Adult News" },
           { to: "/weekly", label: "Weekly Summary" },
+          { to: "/ai-digest", label: "AI Digest" },
+          { to: "/daily-quiz", label: "Daily Quiz" },
+          { to: "/discover", label: "Discover" },
           { to: "/newspapers", label: "Newspapers" },
           { to: "/live", label: "Live TV" }
         ];
@@ -48,6 +58,9 @@ const Navbar = () => {
           { to: "/", label: "Home" },
           { to: "/kids", label: "Kids News" },
           { to: "/weekly", label: "Weekly Kids Highlights" },
+          { to: "/ai-digest", label: "AI Digest" },
+          { to: "/daily-quiz", label: "Daily Quiz" },
+          { to: "/discover", label: "Discover" },
           { to: "/live", label: "Educational Live Channels" }
         ];
       default:

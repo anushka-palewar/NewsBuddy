@@ -1,30 +1,38 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getLiveChannelsAdmin,
   addLiveChannel,
   deleteLiveChannel,
-  toggleLiveChannel
+  toggleLiveChannel,
 } from "../services/newsService";
+import AdminLayout from "../components/AdminLayout";
+
+const AUDIENCES = [
+  { label: "Kids", value: "CHILD" },
+  { label: "Adult", value: "ADULT" },
+];
 
 const AdminLiveChannels = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialAudience = searchParams.get("audience") || "ADULT";
+
+  const [audience, setAudience] = useState(initialAudience);
   const [channels, setChannels] = useState([]);
   const [form, setForm] = useState({
     name: "",
     language: "Hindi",
-    youtubeUrl: ""
+    youtubeUrl: "",
+    audience: initialAudience,
   });
 
-  const load = () => getLiveChannelsAdmin().then(setChannels);
+  const load = () => getLiveChannelsAdmin(audience).then(setChannels);
 
   useEffect(() => {
-    if (!localStorage.getItem("admin")) {
-      navigate("/admin/login");
-      return;
-    }
+    setSearchParams({ audience });
     load();
-  }, [navigate]);
+  }, [audience]);
 
   const submit = async () => {
     if (!form.name || !form.youtubeUrl) {
@@ -32,58 +40,61 @@ const AdminLiveChannels = () => {
       return;
     }
 
-    if (
-      typeof form.youtubeUrl !== "string" ||
-      !form.youtubeUrl.includes("youtube")
-    ) {
+    if (typeof form.youtubeUrl !== "string" || !form.youtubeUrl.includes("youtube")) {
       alert("Enter a valid YouTube URL");
       return;
     }
 
     await addLiveChannel(form);
-    setForm({ name: "", language: "Hindi", youtubeUrl: "" });
+    setForm({ name: "", language: "Hindi", youtubeUrl: "", audience });
     load();
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      
-      {/* Header */}
-      <div className="flex items-center mb-6">
+    <AdminLayout title="Live TV Management" subtitle="Manage live channel feeds for Kids and Adult users">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Audience:</span>
+          {AUDIENCES.map((item) => (
+            <button
+              key={item.value}
+              onClick={() => {
+                setAudience(item.value);
+                setForm((current) => ({ ...current, audience: item.value }));
+              }}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                audience === item.value
+                  ? "bg-black text-white"
+                  : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
         <button
           onClick={() => navigate("/admin/dashboard")}
-          className="mr-4 text-sm text-gray-600 hover:underline"
+          className="text-sm text-gray-600 hover:underline"
         >
           ← Back to Dashboard
         </button>
-        <h1 className="text-2xl font-bold">
-          Live Channel Management
-        </h1>
       </div>
 
-      {/* Card */}
       <div className="bg-white rounded-xl shadow p-6">
-
-        {/* Add Channel */}
-        <h3 className="font-semibold mb-4">
-          Add Live Channel
-        </h3>
+        <h3 className="font-semibold mb-4">Add Live Channel</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
           <input
             placeholder="Channel Name"
             value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="border px-3 py-2 rounded"
           />
 
           <select
             value={form.language}
-            onChange={(e) =>
-              setForm({ ...form, language: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, language: e.target.value })}
             className="border px-3 py-2 rounded"
           >
             <option>Hindi</option>
@@ -94,9 +105,7 @@ const AdminLiveChannels = () => {
           <input
             placeholder="YouTube Live URL"
             value={form.youtubeUrl}
-            onChange={(e) =>
-              setForm({ ...form, youtubeUrl: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, youtubeUrl: e.target.value })}
             className="border px-3 py-2 rounded sm:col-span-2"
           />
 
@@ -110,15 +119,10 @@ const AdminLiveChannels = () => {
 
         <hr className="my-6" />
 
-        {/* Channel List */}
-        <h3 className="font-semibold mb-4">
-          Existing Channels
-        </h3>
+        <h3 className="font-semibold mb-4">Existing Channels</h3>
 
         {channels.length === 0 && (
-          <p className="text-sm text-gray-500">
-            No channels added yet.
-          </p>
+          <p className="text-sm text-gray-500">No channels added yet.</p>
         )}
 
         <div className="space-y-3">
@@ -128,11 +132,9 @@ const AdminLiveChannels = () => {
               className="flex items-center justify-between border rounded-lg px-4 py-3"
             >
               <div>
-                <p className="font-medium">
-                  {c.name}
-                </p>
+                <p className="font-medium">{c.name}</p>
                 <p className="text-sm text-gray-500">
-                  Language: {c.language}
+                  Language: {c.language} • Audience: {c.audience || "—"}
                 </p>
               </div>
 
@@ -170,9 +172,8 @@ const AdminLiveChannels = () => {
             </div>
           ))}
         </div>
-
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 

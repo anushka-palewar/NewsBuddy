@@ -14,6 +14,7 @@ public class Newspaper {
 
     private String name;
     private String language;   // Hindi / Marathi / English
+    private String audience;   // ADULT / CHILD
     private String format;       // PDF / WEBSITE
     private String url;
     private String imageUrl;
@@ -35,6 +36,12 @@ public class Newspaper {
 	}
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	public String getAudience() {
+		return audience;
+	}
+	public void setAudience(String audience) {
+		this.audience = audience;
 	}
 	public String getUrl() {
 		return url;

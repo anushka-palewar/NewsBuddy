@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.sp.main.entity.Newspaper;
@@ -20,8 +21,11 @@ public class NewspaperPublicController {
     private NewspaperRepository repo;
 
     @GetMapping
-    public List<Newspaper> getActiveNewspapers() {
-        return repo.findByActiveTrue();
+    public List<Newspaper> getActiveNewspapers(@RequestParam(required = false) String audience) {
+        if (audience == null || audience.isBlank()) {
+            return repo.findByActiveTrue();
+        }
+        return repo.findByAudienceAndActiveTrue(audience.toUpperCase());
     }
 }
 

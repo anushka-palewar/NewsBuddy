@@ -10,7 +10,7 @@ const SearchResults = () => {
   useEffect(() => {
     if (!query) return;
 
-    fetch("http://localhost:8080/api/news/adult")
+    fetch("/api/news/adult")
       .then(res => res.json())
       .then(data => {
         if (!Array.isArray(data)) return [];

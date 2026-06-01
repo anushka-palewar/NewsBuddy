@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post('/api/auth/login', {
         email,
         password
       });
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   const requestAdminOtp = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/admin/request-otp', {
+      const response = await axios.post('/api/auth/admin/request-otp', {
         email,
         password
       });
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyAdminOtp = async (email, otp) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/admin/verify-otp', {
+      const response = await axios.post('/api/auth/admin/verify-otp', {
         email,
         otp
       });
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (fullName, email, password, dateOfBirth) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/register', {
+      const response = await axios.post('/api/auth/register', {
         fullName,
         email,
         password,

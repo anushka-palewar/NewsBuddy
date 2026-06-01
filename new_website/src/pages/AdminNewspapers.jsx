@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getAllPapersAdmin,
   addPaper,
   deletePaper,
-  togglePaper
+  togglePaper,
 } from "../services/newsService";
-import { useNavigate } from "react-router-dom";
+import AdminLayout from "../components/AdminLayout";
+
+const AUDIENCES = [
+  { label: "Kids", value: "CHILD" },
+  { label: "Adult", value: "ADULT" },
+];
 
 const AdminNewspapers = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const initialAudience = searchParams.get("audience") || "ADULT";
+  const [audience, setAudience] = useState(initialAudience);
 
   const [papers, setPapers] = useState([]);
   const [form, setForm] = useState({
@@ -16,23 +26,19 @@ const AdminNewspapers = () => {
     language: "English",
     format: "WEBSITE",
     url: "",
-    imageUrl: ""
+    imageUrl: "",
+    audience: initialAudience,
   });
 
-  useEffect(() => {
-    if (!localStorage.getItem("admin")) {
-      navigate("/admin/login");
-    }
-  }, [navigate]);
-
   const load = async () => {
-    const data = await getAllPapersAdmin();
+    const data = await getAllPapersAdmin(audience);
     setPapers(data);
   };
 
   useEffect(() => {
+    setSearchParams({ audience });
     load();
-  }, []);
+  }, [audience]);
 
   const submit = async () => {
     if (!form.name || !form.url || !form.imageUrl) {
@@ -45,47 +51,59 @@ const AdminNewspapers = () => {
       language: "English",
       format: "WEBSITE",
       url: "",
-      imageUrl: ""
+      imageUrl: "",
+      audience,
     });
     load();
   };
 
   return (
-    <div style={styles.container}>
-      <button
-        onClick={() => navigate("/admin/dashboard")}
-        className="mr-4 text-sm text-gray-600 hover:underline"
-      >
-        ← Back to Dashboard
-      </button>
-      {/* Header */}
-      <div style={styles.header}>
-        <h1>📰 Newspaper Management</h1>
+    <AdminLayout
+      title="Newspaper Management"
+      subtitle="Manage newspapers for Kids and Adult audiences"
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Audience:</span>
+          {AUDIENCES.map((item) => (
+            <button
+              key={item.value}
+              onClick={() => {
+                setAudience(item.value);
+                setForm((current) => ({ ...current, audience: item.value }));
+              }}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                audience === item.value
+                  ? "bg-black text-white"
+                  : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
         <button
-          style={styles.logout}
-          onClick={() => {
-            localStorage.removeItem("admin");
-            navigate("/admin/login");
-          }}
+          onClick={() => navigate("/admin/dashboard")}
+          className="text-sm text-gray-600 hover:underline"
         >
-          Logout
+          ← Back to Dashboard
         </button>
       </div>
 
-      {/* Add Newspaper Card */}
-      <div style={styles.card}>
-        <h3>Add New Newspaper</h3>
+      <div className="bg-white rounded-xl shadow p-6">
+        <h3 className="font-semibold mb-4">Add New Newspaper</h3>
 
-        <div style={styles.formGrid}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <input
-            style={styles.input}
+            className="border px-3 py-2 rounded"
             placeholder="Newspaper Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
 
           <select
-            style={styles.input}
+            className="border px-3 py-2 rounded"
             value={form.language}
             onChange={(e) => setForm({ ...form, language: e.target.value })}
           >
@@ -95,7 +113,7 @@ const AdminNewspapers = () => {
           </select>
 
           <select
-            style={styles.input}
+            className="border px-3 py-2 rounded"
             value={form.format}
             onChange={(e) => setForm({ ...form, format: e.target.value })}
           >
@@ -104,139 +122,74 @@ const AdminNewspapers = () => {
           </select>
 
           <input
-            style={styles.input}
+            className="border px-3 py-2 rounded"
             placeholder="Newspaper URL"
             value={form.url}
             onChange={(e) => setForm({ ...form, url: e.target.value })}
           />
 
           <input
-            style={styles.input}
+            className="border px-3 py-2 rounded"
             placeholder="Logo Image URL"
             value={form.imageUrl}
             onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
           />
+
+          <button
+            onClick={submit}
+            className="bg-black text-white px-4 py-2 rounded w-full sm:col-span-3"
+          >
+            ➕ Add Newspaper
+          </button>
         </div>
 
-        <button style={styles.primaryBtn} onClick={submit}>
-          ➕ Add Newspaper
-        </button>
-      </div>
+        <div className="space-y-3">
+          {papers.length === 0 && (
+            <p className="text-sm text-gray-500">No newspapers found.</p>
+          )}
 
-      {/* Existing Newspapers */}
-      <div style={styles.card}>
-        <h3>Existing Newspapers</h3>
+          {papers.map((p) => (
+            <div
+              key={p.id}
+              className="flex items-center justify-between border rounded-lg p-4"
+            >
+              <div>
+                <div className="text-lg font-semibold text-gray-900">{p.name}</div>
+                <div className="text-sm text-gray-500">
+                  {p.language} • {p.format} • Audience: {p.audience || "—"}
+                </div>
+              </div>
 
-        {papers.length === 0 && <p>No newspapers found</p>}
-
-        {papers.map((p) => (
-          <div key={p.id} style={styles.listItem}>
-            <div>
-              <b>{p.name}</b>
-              <div style={{ fontSize: "13px", color: "#555" }}>
-                {p.language} • {p.format}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    togglePaper(p.id);
+                    load();
+                  }}
+                  className={`px-3 py-1 rounded text-sm font-medium text-white ${
+                    p.active ? "bg-amber-500" : "bg-green-600"
+                  }`}
+                >
+                  {p.active ? "Disable" : "Enable"}
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm("Delete this newspaper?")) {
+                      deletePaper(p.id);
+                      load();
+                    }
+                  }}
+                  className="px-3 py-1 rounded text-sm font-medium bg-red-600 text-white"
+                >
+                  Delete
+                </button>
               </div>
             </div>
-
-            <div style={styles.actions}>
-              <button
-                style={{
-                  ...styles.actionBtn,
-                  background: p.active ? "#fbc02d" : "#4caf50"
-                }}
-                onClick={() => {
-                  togglePaper(p.id);
-                  load();
-                }}
-              >
-                {p.active ? "Disable" : "Enable"}
-              </button>
-
-              <button
-                style={{ ...styles.actionBtn, background: "#e53935" }}
-                onClick={() => {
-                  if (window.confirm("Delete this newspaper?")) {
-                    deletePaper(p.id);
-                    load();
-                  }
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
-};
-
-const styles = {
-  container: {
-    padding: "30px",
-    maxWidth: "1100px",
-    margin: "auto",
-    background: "#f5f7fb",
-    minHeight: "100vh"
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "20px"
-  },
-  logout: {
-    background: "#d32f2f",
-    color: "#fff",
-    border: "none",
-    padding: "8px 14px",
-    cursor: "pointer",
-    borderRadius: "4px"
-  },
-  card: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    marginBottom: "20px",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
-  },
-  formGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "12px",
-    marginBottom: "15px"
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc"
-  },
-  primaryBtn: {
-    background: "#1976d2",
-    color: "#fff",
-    padding: "10px 18px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer"
-  },
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "12px 0",
-    borderBottom: "1px solid #eee"
-  },
-  actions: {
-    display: "flex",
-    gap: "8px"
-  },
-  actionBtn: {
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    borderRadius: "4px",
-    cursor: "pointer"
-  }
 };
 
 export default AdminNewspapers;

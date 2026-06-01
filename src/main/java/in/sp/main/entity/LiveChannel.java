@@ -14,6 +14,7 @@ public class LiveChannel {
 
     private String name;        // Aaj Tak
     private String language;    // Hindi / English / Marathi
+    private String audience;    // ADULT / CHILD
     private String youtubeUrl;
     private boolean active;
 	public Long getId() {
@@ -33,6 +34,12 @@ public class LiveChannel {
 	}
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	public String getAudience() {
+		return audience;
+	}
+	public void setAudience(String audience) {
+		this.audience = audience;
 	}
 	public String getYoutubeUrl() {
 		return youtubeUrl;

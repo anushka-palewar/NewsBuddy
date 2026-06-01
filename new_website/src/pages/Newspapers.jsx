@@ -1,24 +1,29 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthContext";
+import { getNewspapers } from "../services/newsService";
 
 const Newspapers = () => {
+  const { user } = useAuth();
   const [papers, setPapers] = useState([]);
   const [language, setLanguage] = useState("ALL");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/newspapers")
-      .then(res => res.json())
-      .then(data => {
-        // ✅ show only active newspapers
-        const activeOnly = data.filter(p => p.active);
+    const audience = user?.role === "CHILD" ? "CHILD" : user?.role === "ADULT" ? "ADULT" : null;
 
-        // ✅ basic duplicate guard (by id)
+    getNewspapers(audience)
+      .then((data) => {
+        const activeOnly = Array.isArray(data)
+          ? data.filter((p) => p.active)
+          : [];
+
         const unique = Array.from(
-          new Map(activeOnly.map(p => [p.id, p])).values()
+          new Map(activeOnly.map((p) => [p.id, p])).values()
         );
 
         setPapers(unique);
-      });
-  }, []);
+      })
+      .catch(() => setPapers([]));
+  }, [user]);
 
   const filteredPapers =
     language === "ALL"

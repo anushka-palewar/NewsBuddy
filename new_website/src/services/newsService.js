@@ -1,4 +1,4 @@
-const BASE = "http://localhost:8080/api";
+const BASE = "/api";
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
@@ -36,72 +36,186 @@ export const getWeeklyKidsSummary = async () => {
 };
 
 /* ---------- LIVE TV ---------- */
-export const getLiveChannels = async () => {
-  const res = await fetch(`${BASE}/live-channels`);
-  return res.ok ? res.json() : [];
-};
 
 /* ---------- NEWSPAPERS ---------- */
-export const getNewspapers = async () => {
-  const res = await fetch(`${BASE}/newspapers`);
+export const getNewspapers = async (audience) => {
+  const url = audience
+    ? `${BASE}/newspapers?audience=${encodeURIComponent(audience)}`
+    : `${BASE}/newspapers`;
+  const res = await fetch(url);
   return res.ok ? res.json() : [];
 };
 
 export const addPaper = async (paper) => {
-  await fetch("http://localhost:8080/api/admin/newspapers", {
+  await fetch(`${BASE}/admin/newspapers`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(paper),
   });
 };
 
-export const getAllPapersAdmin = async () => {
-  const res = await fetch("http://localhost:8080/api/admin/newspapers");
+export const getAdminStatus = async () => {
+  const res = await fetch(`${BASE}/admin/status`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : {};
+};
+
+export const getAdminUsers = async () => {
+  const res = await fetch(`${BASE}/admin/users`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : [];
+};
+
+export const getLiveChannels = async (audience) => {
+  const url = audience
+    ? `${BASE}/live-channels?audience=${encodeURIComponent(audience)}`
+    : `${BASE}/live-channels`;
+  const res = await fetch(url);
+  return res.ok ? res.json() : [];
+};
+
+export const getAllPapersAdmin = async (audience) => {
+  const url = audience
+    ? `${BASE}/admin/newspapers?audience=${encodeURIComponent(audience)}`
+    : `${BASE}/admin/newspapers`;
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
   return res.ok ? res.json() : [];
 };
 
 export const deletePaper = async (id) => {
-  await fetch(
-    `http://localhost:8080/api/admin/newspapers/${id}`,
-    { method: "DELETE" }
-  );
+  await fetch(`${BASE}/admin/newspapers/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
 };
 
 export const togglePaper = async (id) => {
-  await fetch(
-    `http://localhost:8080/api/admin/newspapers/${id}/toggle`,
-    { method: "PUT" }
-  );
+  await fetch(`${BASE}/admin/newspapers/${id}/toggle`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  });
 };
 
 /* ---------- ADMIN LIVE CHANNELS ---------- */
 
-export const getLiveChannelsAdmin = async () => {
-  const res = await fetch("http://localhost:8080/api/admin/live-channels");
+export const getLiveChannelsAdmin = async (audience) => {
+  const url = audience
+    ? `${BASE}/admin/live-channels?audience=${encodeURIComponent(audience)}`
+    : `${BASE}/admin/live-channels`;
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
   return res.ok ? res.json() : [];
 };
 
 export const addLiveChannel = async (channel) => {
-  await fetch("http://localhost:8080/api/admin/live-channels", {
+  await fetch(`${BASE}/admin/live-channels`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify(channel),
   });
 };
 
 export const deleteLiveChannel = async (id) => {
-  await fetch(
-    `http://localhost:8080/api/admin/live-channels/${id}`,
-    { method: "DELETE" }
-  );
+  await fetch(`${BASE}/admin/live-channels/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
 };
 
 export const toggleLiveChannel = async (id) => {
-  await fetch(
-    `http://localhost:8080/api/admin/live-channels/${id}/toggle`,
-    { method: "PUT" }
-  );
+  await fetch(`${BASE}/admin/live-channels/${id}/toggle`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  });
 };
 
+/* ---------- AI DIGEST ---------- */
+export const getAiDailyDigest = async () => {
+  const res = await fetch(`${BASE}/ai-digest/today`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : null;
+};
 
+export const getAiWeeklyDigest = async () => {
+  const res = await fetch(`${BASE}/ai-digest/weekly`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : null;
+};
 
+export const generateAiDailyDigest = async () => {
+  const res = await fetch(`${BASE}/ai-digest/generate-today`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : null;
+};
+
+export const generateAiWeeklyDigest = async () => {
+  const res = await fetch(`${BASE}/ai-digest/generate-weekly`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : null;
+};
+
+/* ---------- DAILY QUIZ ---------- */
+export const getTodayQuiz = async () => {
+  const res = await fetch(`${BASE}/quiz/today`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : [];
+};
+
+export const submitQuizAnswers = async (answers) => {
+  const res = await fetch(`${BASE}/quiz/submit`, {
+    method: "POST",
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ answers }),
+  });
+  return res.ok ? res.json() : null;
+};
+
+export const getQuizHistory = async () => {
+  const res = await fetch(`${BASE}/quiz/history`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : [];
+};
+
+export const getWeeklyLeaderboard = async () => {
+  const res = await fetch(`${BASE}/quiz/leaderboard`, {
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : [];
+};
+
+export const generateQuizManually = async () => {
+  const res = await fetch(`${BASE}/quiz/generate`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  return res.ok ? res.json() : null;
+};
+
+/* ---------- DISCOVER ---------- */
+export const getTopics = async () => {
+  const res = await fetch(`${BASE}/discover/topics`);
+  return res.ok ? res.json() : [];
+};
+
+export const getArticlesByTopic = async (topicId, page = 0, size = 10) => {
+  const res = await fetch(`${BASE}/discover/topics/${topicId}/articles?page=${page}&size=${size}`);
+  return res.ok ? res.json() : { content: [], totalPages: 0 };
+};
+
+export const getTrendingTopics = async () => {
+  const res = await fetch(`${BASE}/discover/trending`);
+  return res.ok ? res.json() : [];
+};

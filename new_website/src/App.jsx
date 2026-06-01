@@ -10,8 +10,15 @@ import Newspapers from "./pages/Newspapers";
 import LiveNews from "./pages/LiveNews";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminContent from "./pages/AdminContent";
+import AdminUsers from "./pages/AdminUsers";
+import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminSystem from "./pages/AdminSystem";
 import Article from "./pages/Article";
 import WeeklySummary from "./pages/WeeklySummary";
+import AIDigestPage from "./pages/AIDigestPage";
+import DailyQuizPage from "./pages/DailyQuizPage";
+import DiscoverPage from "./pages/DiscoverPage";
 import AdminNewspapers from "./pages/AdminNewspapers";
 import AdminLiveChannels from "./pages/AdminLiveChannels";
 import Login from "./pages/Login";
@@ -46,13 +53,34 @@ function App() {
           } />
           <Route path="/live" element={<LiveNews />} />
           <Route path="/weekly" element={<WeeklySummary />} />
+          <Route path="/ai-digest" element={<AIDigestPage />} />
+          <Route path="/daily-quiz" element={<DailyQuizPage />} />
+          <Route path="/discover" element={<DiscoverPage />} />
 
           <Route path="/admin/dashboard" element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <AdminDashboard />
             </ProtectedRoute>
+          } />          <Route path="/admin/content" element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminContent />
+            </ProtectedRoute>
           } />
-          <Route path="/admin/newspapers" element={
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminUsers />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/analytics" element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminAnalytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/system" element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminSystem />
+            </ProtectedRoute>
+          } />          <Route path="/admin/newspapers" element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <AdminNewspapers />
             </ProtectedRoute>
